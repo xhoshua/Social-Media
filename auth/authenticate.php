@@ -5,9 +5,9 @@ if (isset($_POST['Submit_Register'])) {
     session_start();
     $_SESSION['validate_errors'] = [];
 
-    $firstName = $_POST['first_name'];
-    if (empty($firstName)) {
-        $_SESSION['validate_errors']['first_name'] = 'Emri duhet te vendoset';
+        $firstName = $_POST['first_name'];
+        if (empty($firstName)) {
+            $_SESSION['validate_errors']['first_name'] = 'Emri duhet te vendoset';
     } else if (!preg_match("/^[a-zA-Z-' ]*$/", $firstName)) {
         $_SESSION['validate_errors']['first_name'] = 'Emri duhet vetem me shkronja dhe hapsira';
     }
@@ -72,8 +72,44 @@ if (isset($_POST['Submit_Register'])) {
     }
 }
 
-if (isset($_POST['Submit_Logout'])) {
+if (isset($_POST['Submit_Login'])) {
     session_start();
-    session_destroy();
-    //TODO: redirect to login
+    $_SESSION['validate_errors'] = [];
+    $email = $_POST['email'];
+    if (empty($email)) {
+        $_SESSION['validate_errors']['email'] = 'Email duhet te vendoset';
+    } else if (!filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['validate_errors']['email'] = 'Email nuk esht i valid';
+
+    }
+    $password = $_POST['password'];
+    if (empty($password)) {
+        $_SESSION['validate_errors']['password'] = 'Password-i duhet te vendoset';
+    }
+    $query="select * from users where email=:email";
+    $stmt= $db->prepare($query);
+    $stmt->execute(['email' => $email]);
+    $user = $stmt->fetch();
+    if (!$user){
+        $_SESSION['validate_errors']['email'] = 'Ky email nuk ekziston!';
+    } else if ($user['password']!=md5($password)){
+        $_SESSION['validate_errors']['email'] = 'Passordi esht gabim!';
+
+    }
+    if (count($_SESSION['validate_errors'])) {
+        header('Location: login.php');
+    }
+    if (count($_SESSION['validate_errors'])) {
+        header('Location: login.php');
+    } else {
+            if ($stmt->execute()){
+                $_SESSION['auth_user'] = [
+                    'email' => $email,
+                    'password' =>  $hashedPassword
+                ];
+                header("Location: ../portal/home.php");
+            }
+    }
+
 }
+//TODO: logout

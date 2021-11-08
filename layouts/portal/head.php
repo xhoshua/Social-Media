@@ -36,13 +36,15 @@ if (!isset($_SESSION['auth_user'])){
             <div class="dropdown" align="right">
                 <button class="btn"  style="height: 50px" type="button" data-toggle="dropdown"><i class="fa fa-bars"></i> Settings
                     <span class="caret"></span></button>
+
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="#">Logout</a></li>
+
+                    <li ><a title="Logout" href=" ../auth/logout.php">Logout</a></li>
+
                 </ul>
+
             </div>
         </div>
     </div>
 </nav>
-
-</div>
 <main>

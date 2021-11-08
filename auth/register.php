@@ -1,6 +1,5 @@
 <?php
 include('../layouts/auth/head.php');
-session_start();
 ?>
 
 <div class="container-fluid text-center"  style="background: cornflowerblue">

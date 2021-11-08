@@ -47,6 +47,4 @@ if (isset($_SESSION['auth_user'])) {
         </div>
     </div>
 </nav>
-
-</div>
 <main>
