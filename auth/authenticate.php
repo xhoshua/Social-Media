@@ -51,6 +51,7 @@ if (isset($_POST['Submit_Register'])) {
         $query = "INSERT INTO users (first_name, last_name, email, password, created_at, updated_at) 
                     VALUE (:first_name, :last_name, :email, :password, :created_at, :updated_at)";
         $stmt= $db->prepare($query);
+
         if ($stmt->execute([
             'first_name' => $firstName,
             'last_name' => $lastName,
@@ -58,11 +59,29 @@ if (isset($_POST['Submit_Register'])) {
             'password' =>  $hashedPassword,
             'created_at' => $moment,
             'updated_at' => $moment,
-        ])) {
-            $_SESSION['auth_user']['id'] = last_insert_id();
-            header("Location: ../portal/profile.php");
+        ]))
+//            $query="select * from users where email=:email";
+//            $stmt= $db->prepare($query);
+//        $stmt->execute(['email' => $email]);
+//        $user = $stmt->fetch();
+//        $_SESSION['auth_user']['id'] = $user['Id'];
+//        header("Location: ../portal/profile.php");
+            $query="select * from users where email=:email";
+        $stmt= $db->prepare($query);
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch();
+        if (!$user){
+            $_SESSION['validate_errors']['email'] = 'Ky email nuk ekziston!';
+        } else if ($user['password']!=md5($password)){
+            $_SESSION['validate_errors']['email'] = 'Passordi esht gabim!';
         }
+        if (count($_SESSION['validate_errors'])) {
+            header('Location: login.php');
+        }
+        $_SESSION['auth_user']['id'] = $user['Id'];
+        header("Location: ../portal/profile.php");
     }
+
 }
 
 if (isset($_POST['Submit_Login'])) {
@@ -98,4 +117,12 @@ if (isset($_POST['Submit_Logout'])){
     session_start();//session is a way to store information (in variables) to be used across multiple pages.
     session_destroy();
     header("Location: login.php");//use for the redirection to some page
+}
+if (isset($_POST['Home_Page'])){
+    session_start();//session is a way to store information (in variables) to be used across multiple pages.
+    header("Location:../portal/home.php");//use for the redirection to some page
+}
+if (isset($_POST['Profile'])){
+    session_start();//session is a way to store information (in variables) to be used across multiple pages.
+    header("Location:../portal/profile.php");//use for the redirection to some page
 }

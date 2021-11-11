@@ -1,21 +1,20 @@
 <?php
 include ('../layouts/portal/head.php');
 ?>
-<div class="portal">
+<div class="portal" style="overflow: hidden">
 <div class="container">
-    <div class="row">
+    <div class="row" >
         <div class="col-lg-3 col-sm-6">
 
             <div class="card hovercard">
                 <div class="cardheader">
-
                 </div>
                 <div class="avatar">
                     <img alt=""  width="100px" src="img_avatar.png">
                 </div>
                 <div class="info">
                     <div class="title">
-                        <a target="_blank" href="https://scripteden.com/"><?= $authUser['first_name'] ?>    </a>
+                        <a target="_blank" href="https://scripteden.com/"><?= $authUser['first_name'] ?></a>
                     </div>
                     <div class="desc"><?= $authUser['last_name'] ?></div>
                     <div class="desc"><?= $authUser['email'] ?></div>
